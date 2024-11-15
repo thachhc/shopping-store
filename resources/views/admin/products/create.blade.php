@@ -25,8 +25,8 @@
             <div class="form-group">
                 <label for="category_id">Categories</label>
                 <select name="category_id" class="form-control" required>
-                    @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -34,8 +34,8 @@
             <div class="form-group">
                 <label for="tag_id">Tag</label>
                 <select name="tag_id" class="form-control" required>
-                    @foreach($tags as $tag)
-                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                    @foreach ($tags as $tag)
+                        <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -43,8 +43,8 @@
             <div class="form-group">
                 <label for="brand_id">Brand</label>
                 <select name="brand_id" class="form-control" required>
-                    @foreach($brands as $brand)
-                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    @foreach ($brands as $brand)
+                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -88,9 +88,21 @@
                 <textarea name="description" class="form-control"></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="total_sizes">Tổng Số Lượng Size</label>
-                <input type="number" id="total_sizes" class="form-control" min="1" onchange="generateSizeInputs()" required>
+            <div id="size-quantity-container">
+                <div class="form-group row align-items-center mb-2" id="size-1">
+                    <div class="col-md-6">
+                        <input type="text" name="size[]" class="form-control" placeholder="Size 1">
+                    </div>
+                    <div class="col-md-5">
+                        <input type="number" name="quantity[]" class="form-control" placeholder="Quantity"
+                            min="1">
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <button type="button" class="btn btn-success" onclick="addSizeInput()">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div id="size-quantity-container"></div>
@@ -98,55 +110,71 @@
             <div class="image-preview" id="image-preview"></div>
 
             <div class="form-group" style="display:inline-block; position:relative; margin: 10px;">
-                <input type="file" name="images[]" class="form-control" multiple required accept="image/*" style="display: none;" onchange="previewImages(event)">
-                <div onclick="document.querySelector('input[name=\'images[]\']').click();" style="cursor: pointer; border: 1px dashed #ccc; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                <input type="file" name="images[]" class="form-control" multiple required accept="image/*"
+                    style="display: none;" onchange="previewImages(event)">
+                <div onclick="document.querySelector('input[name=\'images[]\']').click();"
+                    style="cursor: pointer; border: 1px dashed #ccc; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
                     <span style="font-size: 24px; color: #ccc;">&#43;</span>
                 </div>
             </div>
 
             <br />
             <button type="submit" class="btn btn-success">Save Product</button>
-            <a href="{{ route('dashboard') }}" class="btn btn-secondary">Return to Dashboard</a>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Return to Dashboard</a>
         </form>
 
 
     </div>
 
     <script>
-         function generateSizeInputs() {
-            const totalSizes = document.getElementById('total_sizes').value;
+        let sizeCount = 1; // Track number of sizes added
+
+        // Add a new size input
+        function addSizeInput() {
+            sizeCount++;
             const container = document.getElementById('size-quantity-container');
-            container.innerHTML = ''; // Clear previous fields
 
-            for (let i = 1; i <= totalSizes; i++) {
-                const groupDiv = document.createElement('div');
-                groupDiv.classList.add('form-group', 'row', 'align-items-center', 'mb-2');
+            // Create new size input group
+            const groupDiv = document.createElement('div');
+            groupDiv.classList.add('form-group', 'row', 'align-items-center', 'mb-2');
+            groupDiv.id = `size-${sizeCount}`;
 
-                const sizeInputContainer = document.createElement('div');
-                sizeInputContainer.classList.add('col-md-6', 'text-left');
-                const sizeInput = document.createElement('input');
-                sizeInput.type = 'text';
-                sizeInput.name = `size[]`;
-                sizeInput.classList.add('form-control');
-                sizeInput.placeholder = `Size ${i}`;
-                sizeInputContainer.appendChild(sizeInput);
+            const sizeInputContainer = document.createElement('div');
+            sizeInputContainer.classList.add('col-md-6');
+            const sizeInput = document.createElement('input');
+            sizeInput.type = 'text';
+            sizeInput.name = `size[]`;
+            sizeInput.classList.add('form-control');
+            sizeInput.placeholder = `Size ${sizeCount}`;
+            sizeInputContainer.appendChild(sizeInput);
 
-                const quantityInputContainer = document.createElement('div');
-                quantityInputContainer.classList.add('col-md-6', 'text-right');
-                const quantityInput = document.createElement('input');
-                quantityInput.type = 'number';
-                quantityInput.name = `quantity[]`;
-                quantityInput.classList.add('form-control');
-                quantityInput.placeholder = `Số lượng Size ${i}`;
-                quantityInput.min = "1";
-                quantityInputContainer.appendChild(quantityInput);
+            const quantityInputContainer = document.createElement('div');
+            quantityInputContainer.classList.add('col-md-5');
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.name = `quantity[]`;
+            quantityInput.classList.add('form-control');
+            quantityInput.placeholder = `Quantity`;
+            quantityInput.min = "1";
+            quantityInputContainer.appendChild(quantityInput);
 
-                groupDiv.appendChild(sizeInputContainer);
-                groupDiv.appendChild(quantityInputContainer);
-                container.appendChild(groupDiv);
-            }
+            const removeButtonContainer = document.createElement('div');
+            removeButtonContainer.classList.add('col-md-1', 'text-center');
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.classList.add('btn', 'btn-danger');
+            removeButton.innerHTML = '<i class="bi bi-x-circle"></i>';
+            removeButton.onclick = function() {
+                groupDiv.remove();
+            };
+            removeButtonContainer.appendChild(removeButton);
+
+            groupDiv.appendChild(sizeInputContainer);
+            groupDiv.appendChild(quantityInputContainer);
+            groupDiv.appendChild(removeButtonContainer);
+            container.appendChild(groupDiv);
         }
-        
+
         function calculateSalePrice() {
             const priceField = document.getElementById('price');
             const discountField = document.getElementById('discount');
