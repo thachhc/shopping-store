@@ -1,10 +1,19 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tự đặt tên') }}
-        </h2>
-    </x-slot>
-    <div class="container mt-5">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand</title>
+    <link rel="stylesheet" href="{{ asset('css/brands/index.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+    @include('layouts.navigation')
+    <div class="container">
         <h1>Danh sách Thương Hiệu</h1>
         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createBrandModal"><i class="bi bi-plus"></i> Thêm Thương Hiệu Mới</button>
 
@@ -90,7 +99,7 @@
                 @endforeach
             </tbody>
         </table>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Quay lại Dashboard</a>
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Quay lại Dashboard</a>
     </div>
 
     <script>
@@ -240,6 +249,5 @@
             }
         });
     </script>
-
-
-</x-app-layout>
+</body>
+</html>

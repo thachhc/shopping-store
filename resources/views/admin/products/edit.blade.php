@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product update</title>
-    <link rel="stylesheet" href="{{ asset('css/products/edit.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<body>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('List product') }}
+        </h2>
+    </x-slot>
     <div class="container">
         <h1>Product update: {{ $product->name }}</h1>
-        <form id="product-form" action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+        <form id="product-form" action="{{ route('products.update', $product->id) }}" method="POST"
+            enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <input type="text" name="name" class="form-control" value="{{ old('name', $product->name) }}" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name', $product->name) }}"
+                    required>
                 <label for="name" class="floating-label">Product name</label>
             </div>
 
             <div class="form-group">
                 <label for="brand_id">Brand</label>
                 <select name="brand_id" class="form-control" required>
-                    @foreach($brands as $brand)
-                    <option value="{{ $brand->id }}" {{ $brand->id == $product->brand_id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                    @foreach ($brands as $brand)
+                        <option value="{{ $brand->id }}" {{ $brand->id == $product->brand_id ? 'selected' : '' }}>
+                            {{ $brand->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -34,8 +30,10 @@
             <div class="form-group">
                 <label for="category_id">Category</label>
                 <select name="category_id" class="form-control" required>
-                    @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ $category->id == $product->category_id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}"
+                            {{ $category->id == $product->category_id ? 'selected' : '' }}>{{ $category->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -43,32 +41,36 @@
             <div class="form-group">
                 <label for="tag_id">Product tag</label>
                 <select name="tag_id" class="form-control" required>
-                    @foreach($tags as $tag)
-                    <option value="{{ $tag->id }}" {{ $tag->id == $product->tag_id ? 'selected' : '' }}>{{ $tag->name }}</option>
+                    @foreach ($tags as $tag)
+                        <option value="{{ $tag->id }}" {{ $tag->id == $product->tag_id ? 'selected' : '' }}>
+                            {{ $tag->name }}</option>
                     @endforeach
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="number" name="price" class="form-control" value="{{ old('price', $product->price) }}" required>
+                <input type="number" name="price" class="form-control" value="{{ old('price', $product->price) }}"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="discount">Discount (%)</label>
                 <select name="discount" class="form-control" onchange="calculateSalePrice()">
-                    @for ($i = 0; $i <= 30; $i +=5)
-                        <option value="{{ $i }}" {{ $product->discount == $i ? 'selected' : '' }}>{{ $i }}%</option>
-                        @endfor
+                    @for ($i = 0; $i <= 30; $i += 5)
+                        <option value="{{ $i }}" {{ $product->discount == $i ? 'selected' : '' }}>
+                            {{ $i }}%</option>
+                    @endfor
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="price_sale">Price sale</label>
-                <input type="text" name="price_sale" class="form-control" id="price_sale" value="{{ old('price_sale', $product->price_sale) }}" readonly>
+                <input type="text" name="price_sale" class="form-control" id="price_sale"
+                    value="{{ old('price_sale', $product->price_sale) }}" readonly>
             </div>
 
-            
+
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea name="description" class="form-control">{{ old('description', $product->description) }}</textarea>
@@ -78,15 +80,19 @@
                 <!-- Hình ảnh hiện tại -->
                 <h5>Current image:</h5>
                 <div class="image-preview" id="image-preview">
-                    @if($product->image)
-                    @foreach(json_decode($product->image) as $key => $image)
-                    <div id="image-{{ $key }}" style="display:inline-block; position:relative; margin: 10px;">
-                        <img src="{{ asset($image) }}" width="100" height="100" alt="Hình ảnh sản phẩm" onclick="selectImage('{{ $key }}')">
-                        <span class="remove-icon" onclick="removeImage('{{ $key }}')" style="cursor: pointer; color: white; font-size: 16px; background-color: red; border-radius: 50%; padding: 2px 5px; position: absolute; top: 0; right: 0;">&times;</span>
-                        <input type="hidden" name="existing_images[]" value="{{ $image }}">
-                        <input type="file" name="updated_images[{{ $key }}]" accept="image/*" style="display:none;" onchange="previewUpdatedImage(event, '{{ $key }}')">
-                    </div>
-                    @endforeach
+                    @if ($product->image)
+                        @foreach (json_decode($product->image) as $key => $image)
+                            <div id="image-{{ $key }}"
+                                style="display:inline-block; position:relative; margin: 10px;">
+                                <img src="{{ asset($image) }}" width="100" height="100" alt="Hình ảnh sản phẩm"
+                                    onclick="selectImage('{{ $key }}')">
+                                <span class="remove-icon" onclick="removeImage('{{ $key }}')"
+                                    style="cursor: pointer; color: white; font-size: 16px; background-color: red; border-radius: 50%; padding: 2px 5px; position: absolute; top: 0; right: 0;">&times;</span>
+                                <input type="hidden" name="existing_images[]" value="{{ $image }}">
+                                <input type="file" name="updated_images[{{ $key }}]" accept="image/*"
+                                    style="display:none;" onchange="previewUpdatedImage(event, '{{ $key }}')">
+                            </div>
+                        @endforeach
                     @endif
                 </div>
 
@@ -95,8 +101,10 @@
                 <h5>New image:</h5>
                 <div id="new-images-preview" class="image-preview" style="margin-top: 10px;"></div>
                 <div id="add-image" style="display:inline-block; position:relative; margin: 10px;">
-                    <input type="file" name="new_images[]" class="form-control" multiple accept="image/*" style="display: none;" onchange="previewImages(event)">
-                    <div onclick="document.querySelector('input[name=\'new_images[]\']').click();" style="cursor: pointer; border: 1px dashed #ccc; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                    <input type="file" name="new_images[]" class="form-control" multiple accept="image/*"
+                        style="display: none;" onchange="previewImages(event)">
+                    <div onclick="document.querySelector('input[name=\'new_images[]\']').click();"
+                        style="cursor: pointer; border: 1px dashed #ccc; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
                         <span style="font-size: 24px; color: #ccc;">&#43;</span> <!-- Biểu tượng dấu cộng -->
                     </div>
                 </div>
@@ -105,7 +113,7 @@
             <input type="hidden" id="removed-images" name="removed_images" value="">
             <input type="hidden" id="product-id" data-id="{{ $product->id }}">
             <input type="hidden" name="redirect_to_codesize" id="redirect_to_codesize" value="0">
-            
+
         </form>
         <form class="btn" action="{{ route('products.index') }}" method="GET" style="display:inline;">
             <button type="button" class="btn btn-success" onclick="confirmUpdate()">Product update</button>
@@ -205,7 +213,6 @@
                 reader.readAsDataURL(file);
             }
         }
-
         function previewUpdatedImage(event, key) {
             const previewContainer = document.getElementById(`image-${key}`);
             const files = event.target.files;
@@ -219,6 +226,4 @@
             }
         }
     </script>
-</body>
-
-</html>
+</x-app-layout>
