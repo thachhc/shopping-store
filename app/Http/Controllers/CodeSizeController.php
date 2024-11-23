@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CodeSize;
+use App\Models\SizeCode;
 use Illuminate\Http\Request;
 
-class CodeSizeController extends Controller
+class SizeCodeController extends Controller
 {
     // Hiển thị form để thêm size và quantity
     public function create(Request $request)
     {
         $productId = $request->get('product_id');
-        return view('admin.codesizes.create', compact('productId'));
+        return view('admin.SizeCodes.create', compact('productId'));
     }
 
-    // Lưu thông tin size và quantity vào bảng codesizes
+    // Lưu thông tin size và quantity vào bảng SizeCodes
     public function store(Request $request)
     {
         $request->validate([
@@ -30,7 +30,7 @@ class CodeSizeController extends Controller
         $productId = $request->input('product_id');
 
         for ($i = 0; $i < count($sizeInputs); $i++) {
-            CodeSize::create([
+            SizeCode::create([
                 'sizenumber' => $sizeInputs[$i],
                 'product_id' => $productId,
                 'quantity' => $quantityInputs[$i],
@@ -42,10 +42,10 @@ class CodeSizeController extends Controller
 
     public function editByProduct($productId)
     {
-        // Lấy tất cả các CodeSize dựa trên product_id
-        $sizes = CodeSize::where('product_id', $productId)->get();
+        // Lấy tất cả các SizeCode dựa trên product_id
+        $sizes = SizeCode::where('product_id', $productId)->get();
 
-        return view('admin.codesizes.edit', [
+        return view('admin.SizeCodes.edit', [
             'sizes' => $sizes,
             'productId' => $productId
         ]);
@@ -63,8 +63,8 @@ class CodeSizeController extends Controller
         $sizeInputs = $request->input('size');
         $quantityInputs = $request->input('quantity');
 
-        // Lấy tất cả các CodeSize có cùng product_id để cập nhật
-        $existingSizes = CodeSize::where('product_id', $productId)->get();
+        // Lấy tất cả các SizeCode có cùng product_id để cập nhật
+        $existingSizes = SizeCode::where('product_id', $productId)->get();
 
         // Cập nhật kích thước và số lượng
     foreach ($existingSizes as $existingSize) {
@@ -89,15 +89,13 @@ class CodeSizeController extends Controller
     foreach ($sizeInputs as $index => $size) {
         // Kiểm tra xem quantity có tồn tại cho size không
         if (isset($quantityInputs[$index])) {
-            CodeSize::create([
+            SizeCode::create([
                 'sizenumber' => $size,
                 'product_id' => $productId,
                 'quantity' => $quantityInputs[$index],
             ]);
         }
     }
-
-
         return redirect()->route('products.index')->with('success', 'Sizes updated successfully!');
     }
 }

@@ -65,7 +65,6 @@
                 <input type="text" name="price_sale" id="price_sale" class="form-control" readonly>
             </div>
 
-
             <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" class="form-control" required>
@@ -113,8 +112,6 @@
             <button type="submit" class="btn btn-success">Save Product</button>
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Return to Dashboard</a>
         </form>
-
-
     </div>
 
     <script>
@@ -124,7 +121,6 @@
         function addSizeInput() {
             sizeCount++;
             const container = document.getElementById('size-quantity-container');
-
             // Create new size input group
             const groupDiv = document.createElement('div');
             groupDiv.classList.add('form-group', 'row', 'align-items-center', 'mb-2');
