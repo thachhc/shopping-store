@@ -217,4 +217,20 @@ class ProductController extends Controller
 
         return view('admin.products.index', compact('products'));
     }
+
+
+
+
+
+
+    public function show($id)
+{
+    
+    // Lấy sản phẩm từ cơ sở dữ liệu
+    $product = Product::find($id);
+
+    // Giải mã chuỗi JSON và gán vào biến 'images'
+    $product->images = json_decode($product->image, true);
+    return view('user.detail', compact('product'));
+}
 }

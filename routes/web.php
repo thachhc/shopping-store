@@ -60,3 +60,9 @@ Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->
 Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
 
 });
+
+
+
+
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+

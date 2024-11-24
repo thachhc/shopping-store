@@ -9,9 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
+    @include('layouts.navigation')
     <div class="container mt-5">
         <h1 class="text-center">Product List</h1>
         <div class="mb-4">
@@ -74,11 +76,10 @@
             </tbody>
         </table>
         <div class="text-center mt-4">
-            <form action="{{ route('dashboard') }}" method="GET" style="display:inline;">
+            <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
                 <button type="submit" class="btn btn-outline-secondary">Return to Dashboard</button>
             </form>
         </div>
     </div>
 </body>
-
 </html>

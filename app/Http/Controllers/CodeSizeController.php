@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SizeCode;
 use Illuminate\Http\Request;
 
-class SizeCodeController extends Controller
+class CodeSizeController extends Controller
 {
     // Hiển thị form để thêm size và quantity
     public function create(Request $request)
