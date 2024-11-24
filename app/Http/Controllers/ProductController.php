@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Tag;
-use App\Models\CodeSize;
+use App\Models\SizeCode;
 
 class ProductController extends Controller
 {
@@ -26,55 +26,6 @@ class ProductController extends Controller
         $tags = Tag::all();
         return view('admin.products.create', compact('categories', 'brands', 'tags'));
     }
-
-    // Xử lý thêm sản phẩm mới
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'price' => 'required|numeric',
-    //         'price_sale' => 'nullable|numeric', // Để trường này có thể để trống
-    //         'description' => 'nullable|string',
-    //         'brand_id' => 'required|exists:brands,id',
-    //         'category_id' => 'required|exists:categories,id',
-    //         'tag_id' => 'required|exists:tags,id',
-    //         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-    //     ]);
-
-    //     $product = new Product();
-    //     $product->name = $request->name;
-    //     $product->price = $request->price;
-
-    //     // Chỉ gán giá trị price_sale nếu nó được cung cấp và không rỗng
-    //     if ($request->filled('price_sale')) {
-    //         $product->price_sale = $request->price_sale;
-    //     } else {
-    //         $product->price_sale = null; // Đặt giá trị là null nếu không có dữ liệu
-    //     }
-
-    //     $product->description = $request->description;
-    //     $product->brand_id = $request->brand_id;
-    //     $product->category_id = $request->category_id;
-    //     $product->tag_id = $request->tag_id;
-
-    //     $imagePaths = [];
-
-    //     if ($request->hasFile('images')) {
-    //         $index = 1;
-    //         foreach ($request->file('images') as $image) {
-    //             $imageName = time() . '-' . $image->getClientOriginalName();
-    //             $destinationPath = public_path('images');
-    //             $image->move($destinationPath, $imageName);
-    //             $imagePaths['image' . $index] = 'images/' . $imageName;
-    //             $index++;
-    //         }
-    //     }
-
-    //     $product->image = json_encode($imagePaths);
-    //     $product->save();
-
-    //     return redirect()->route('codesizes.create', ['product_id' => $product->id]);
-    // }
 
     public function store(Request $request)
     {
@@ -113,7 +64,6 @@ class ProductController extends Controller
                 $imagePaths[] = 'images/' . $imageName;
             }
         }
-
         $product->image = json_encode($imagePaths);
         $product->save();
 
@@ -122,7 +72,7 @@ class ProductController extends Controller
         $quantities = $request->quantity;
 
         for ($i = 0; $i < count($sizes); $i++) {
-            CodeSize::create([
+            SizeCode::create([
                 'sizenumber' => $sizes[$i],
                 'product_id' => $product->id,
                 'quantity' => $quantities[$i],
@@ -132,8 +82,6 @@ class ProductController extends Controller
         // Sau khi lưu sản phẩm và size, chuyển hướng về trang danh sách sản phẩm
         return redirect()->route('products.index')->with('success', 'Product and sizes created successfully!');
     }
-
-
 
     // Form sửa sản phẩm
     public function edit($id)
@@ -149,6 +97,7 @@ class ProductController extends Controller
     public function update(Request $request, $productId)
     {
         $product = Product::findOrFail($productId);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
@@ -160,72 +109,79 @@ class ProductController extends Controller
             'new_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Định nghĩa đường dẫn lưu hình ảnh
-        $destinationPath = public_path('images');
+        // Cập nhật thông tin sản phẩm
+        $product->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'price_sale' => $request->price_sale,
+            'description' => $request->description,
+            'brand_id' => $request->brand_id,
+            'category_id' => $request->category_id,
+            'tag_id' => $request->tag_id,
+        ]);
 
-        // Xử lý hình ảnh cũ
-        $existingImages = json_decode($product->image, true);
+            // Định nghĩa đường dẫn lưu hình ảnh
+            $destinationPath = public_path('images');
 
-        // Cập nhật hình ảnh mới
-        $newImages = [];
-        if ($request->hasFile('new_images')) {
-            foreach ($request->file('new_images') as $image) {
-                $imageName = time() . '-' . $image->getClientOriginalName();
-                $image->move($destinationPath, $imageName);
-                $newImages[] = 'images/' . $imageName;
+            // Xử lý hình ảnh cũ
+            $existingImages = json_decode($product->image, true);
+
+            // Cập nhật hình ảnh mới
+            $newImages = [];
+            if ($request->hasFile('new_images')) {
+                foreach ($request->file('new_images') as $image) {
+                    $imageName = time() . '-' . $image->getClientOriginalName();
+                    $image->move($destinationPath, $imageName);
+                    $newImages[] = 'images/' . $imageName;
+                }
             }
-        }
 
-        // Xử lý hình ảnh đã cập nhật
-        if ($request->has('updated_images')) {
-            foreach ($request->updated_images as $key => $updatedImage) {
-                if ($updatedImage) {
-                    // Xóa hình ảnh cũ
+            // Xử lý hình ảnh đã cập nhật
+            if ($request->has('updated_images')) {
+                foreach ($request->updated_images as $key => $updatedImage) {
+                    if ($updatedImage) {
+                        // Xóa hình ảnh cũ
+                        $oldImagePath = public_path($existingImages[$key]);
+                        if (file_exists($oldImagePath)) {
+                            unlink($oldImagePath);
+                        }
+
+                        // Lưu hình ảnh mới
+                        $imageName = time() . '-' . $updatedImage->getClientOriginalName();
+                        $updatedImage->move($destinationPath, $imageName);
+                        $existingImages[$key] = 'images/' . $imageName; // Cập nhật hình ảnh mới vào mảng
+                    }
+                }
+            }
+
+            // Xử lý hình ảnh bị xóa
+            if ($request->removed_images) {
+                $removedImages = json_decode($request->removed_images);
+                foreach ($removedImages as $key) {
                     $oldImagePath = public_path($existingImages[$key]);
                     if (file_exists($oldImagePath)) {
-                        unlink($oldImagePath);
+                        unlink($oldImagePath); // Xóa hình ảnh khỏi hệ thống
                     }
-
-                    // Lưu hình ảnh mới
-                    $imageName = time() . '-' . $updatedImage->getClientOriginalName();
-                    $updatedImage->move($destinationPath, $imageName);
-                    $existingImages[$key] = 'images/' . $imageName; // Cập nhật hình ảnh mới vào mảng
+                    unset($existingImages[$key]); // Xóa hình ảnh khỏi mảng
                 }
             }
-        }
 
-        // Xử lý hình ảnh bị xóa
-        if ($request->removed_images) {
-            $removedImages = json_decode($request->removed_images);
-            foreach ($removedImages as $key) {
-                $oldImagePath = public_path($existingImages[$key]);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath); // Xóa hình ảnh khỏi hệ thống
-                }
-                unset($existingImages[$key]); // Xóa hình ảnh khỏi mảng
-            }
-        }
+            // Cập nhật hình ảnh trong database
+            $product->image = json_encode(array_merge($existingImages, $newImages));
 
-        // Cập nhật hình ảnh trong database
-        $product->image = json_encode(array_merge($existingImages, $newImages));
-
-        // Cập nhật thông tin khác của sản phẩm
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->price_sale = $request->price_sale;
-        $product->description = $request->description;
-        $product->brand_id = $request->brand_id;
-        $product->category_id = $request->category_id;
-        $product->tag_id = $request->tag_id;
 
         $product->save();
 
-        // Chuyển hướng tùy thuộc vào giá trị của redirect_to_codesize
-        if ($request->redirect_to_codesize == "1") {
-            return redirect()->route('codesizes.editByProduct', ['product_id' => $productId]);
-        } else {
-            return redirect()->route('products.index')->with('success', 'Sản phẩm đã được cập nhật!');
+        // Xử lý size và quantity
+        $product->sizes()->delete();
+        foreach ($request->size as $index => $size) {
+            $product->sizes()->updateOrCreate(
+                ['sizenumber' => $size],
+                ['quantity' => $request->quantity[$index]]
+            );
         }
+
+        return redirect()->route('products.index')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 
     // Xử lý xóa sản phẩm
@@ -261,4 +217,20 @@ class ProductController extends Controller
 
         return view('admin.products.index', compact('products'));
     }
+
+
+
+
+
+
+    public function show($id)
+{
+    
+    // Lấy sản phẩm từ cơ sở dữ liệu
+    $product = Product::find($id);
+
+    // Giải mã chuỗi JSON và gán vào biến 'images'
+    $product->images = json_decode($product->image, true);
+    return view('user.detail', compact('product'));
+}
 }

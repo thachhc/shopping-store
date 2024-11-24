@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('codesizes', function (Blueprint $table) {
+        Schema::create('code_sizes', function (Blueprint $table) {
             $table->id();
             $table->integer('sizenumber');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity');
-            // $table->boolean('status')->default(true);
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('codesizes');
+        Schema::dropIfExists('code_sizes');
     }
 };
