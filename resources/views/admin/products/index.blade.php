@@ -74,7 +74,7 @@
             </tbody>
         </table>
         <div class="text-center mt-4">
-            <form action="{{ route('dashboard') }}" method="GET" style="display:inline;">
+            <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
                 <button type="submit" class="btn btn-outline-secondary">Return to Dashboard</button>
             </form>
         </div>
