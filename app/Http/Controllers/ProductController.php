@@ -64,13 +64,16 @@ class ProductController extends Controller
                 $imagePaths[] = 'images/' . $imageName;
             }
         }
+
         
         $product->image = json_encode($imagePaths, JSON_UNESCAPED_SLASHES);
+
         $product->save();
 
         // Lưu size và quantity
         $sizes = $request->size;
         $quantities = $request->quantity;
+
 
         if (count($sizes) === count($quantities)) {
             for ($i = 0; $i < count($sizes); $i++) {
@@ -80,6 +83,7 @@ class ProductController extends Controller
                     'quantity' => $quantities[$i],
                 ]);
             }
+
         }
         return redirect()->route('products.index')->with('success', 'Product and sizes created successfully!');
     }
@@ -110,6 +114,7 @@ class ProductController extends Controller
             'new_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+
         $product->update([
             'name' => $request->name,
             'price' => $request->price,
@@ -120,6 +125,7 @@ class ProductController extends Controller
             'tag_id' => $request->tag_id,
         ]);
 
+
         $imagePaths = json_decode($product->image, true) ?? [];
         $destinationPath = public_path('images');
         $newImages = [];
@@ -129,8 +135,9 @@ class ProductController extends Controller
                 $imageName = time() . '-' . $image->getClientOriginalName();
                 $image->move($destinationPath, $imageName);
                 $newImages[] = 'images/' . $imageName;
+
             }
-        }
+
 
         // Kết hợp hình ảnh cũ và mới
         $product->image = json_encode(array_merge($imagePaths, $newImages), JSON_UNESCAPED_SLASHES);
@@ -145,15 +152,13 @@ class ProductController extends Controller
                 $product->sizes()->updateOrCreate(
                     ['sizenumber' => $size],
                     ['quantity' => $request->quantity[$index]]
-                );
+                ); 
+
             }
-        }
 
 
-
-
-
-
+            // Cập nhật hình ảnh trong database
+            $product->image = json_encode(array_merge($existingImages, $newImages));
 
 
 
@@ -206,6 +211,7 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
+
     public function show($id)
     {
         // Lấy sản phẩm từ cơ sở dữ liệu
@@ -215,5 +221,20 @@ class ProductController extends Controller
         // $product->images = json_decode(stripslashes($product->image), true);
         return view('user.detail', compact('product'));
     }
+
+
+
+
+
+    public function show($id)
+{
+    
+    // Lấy sản phẩm từ cơ sở dữ liệu
+    $product = Product::find($id);
+
+    // Giải mã chuỗi JSON và gán vào biến 'images'
+    $product->images = json_decode($product->image, true);
+    return view('user.detail', compact('product'));
+}
 
 }

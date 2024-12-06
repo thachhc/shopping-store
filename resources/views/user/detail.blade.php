@@ -1,3 +1,4 @@
+
 @extends('layouts.front')
 
 @section('style')
@@ -226,10 +227,12 @@
             <div class="row mt-3">
                 <div class="col-md-12">
                     <a href="{{ route('products.index') }}" class="btn btn-secondary">Quay lại danh sách sản phẩm</a>
+
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 
@@ -296,3 +299,4 @@
     }
 </script>
 @endsection
+

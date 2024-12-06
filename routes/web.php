@@ -64,3 +64,9 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     // Route cập nhật danh mục
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
 });
+
+
+
+
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
