@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('codesizes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('sizenumber');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->integer('quantity');
-            // $table->boolean('status')->default(true);
+        Schema::create('carts', function (Blueprint $table) {
+            $table->id(); // ID giỏ hàng
+            $table->unsignedBigInteger('customer_id'); // ID người dùng
             $table->timestamps();
+
+            // Khóa ngoại liên kết với bảng users
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
         });
-        
     }
 
     /**
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('codesizes');
+        Schema::dropIfExists('carts');
     }
 };

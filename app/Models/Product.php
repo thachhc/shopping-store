@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class Product extends Model
 {
@@ -19,7 +18,6 @@ class Product extends Model
         'price_sale',
         'description',
         'status',
-        'colorsize',
         'image'
     ];
 
@@ -43,5 +41,9 @@ class Product extends Model
         return $this->belongsTo(Tag::class);
     }
 
+    public function sizes()
+    {
+        return $this->hasMany(SizeCode::class, 'product_id');
+    }
     
 }

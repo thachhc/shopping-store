@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('List product') }}
+            {{ __('Add new product') }}
         </h2>
     </x-slot>
     <div class="container mt-5">
-        <h1 class="text-center">Add New Product</h1>
+        {{-- <h1 class="text-center">Add New Product</h1> --}}
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
@@ -65,7 +65,6 @@
                 <input type="text" name="price_sale" id="price_sale" class="form-control" readonly>
             </div>
 
-
             <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" class="form-control" required>
@@ -113,8 +112,6 @@
             <button type="submit" class="btn btn-success">Save Product</button>
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Return to Dashboard</a>
         </form>
-
-
     </div>
 
     <script>
@@ -124,7 +121,6 @@
         function addSizeInput() {
             sizeCount++;
             const container = document.getElementById('size-quantity-container');
-
             // Create new size input group
             const groupDiv = document.createElement('div');
             groupDiv.classList.add('form-group', 'row', 'align-items-center', 'mb-2');
