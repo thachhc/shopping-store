@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('List product') }}
+            {{ __('Add new product') }}
         </h2>
     </x-slot>
     <div class="container mt-5">
-        <h1 class="text-center">Add New Product</h1>
+        {{-- <h1 class="text-center">Add New Product</h1> --}}
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">

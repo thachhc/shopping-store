@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -26,6 +27,38 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        DB::table('users')->insert([
+            [
+                'name' => 'Admin',
+                'first_name' => 'Admin',
+                'last_name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'phone_number' => '1234567890',
+                'user_name' => 'admin',
+                'password' => bcrypt('123456789'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'birthday' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'User',
+                'first_name' => 'User',
+                'last_name' => 'User',
+                'email' => 'user@gmail.com',
+                'phone_number' => '1234567890',
+                'user_name' => 'user',
+                'password' => bcrypt('123456789'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'birthday' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Thêm nhiều bản ghi mẫu khác nếu cần
+        ]);
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

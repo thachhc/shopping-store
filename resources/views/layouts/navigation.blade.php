@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('welcome') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
@@ -19,32 +19,52 @@
                     </x-nav-link>
                     {{-- Admin Links --}}
                     @if (Auth::user()->role == 'admin')
-                        <x-nav-link href="admin/product" :active="request()->routeIs('admin.product')">
-                            {{ __('Product') }}
-                        </x-nav-link>
 
-                        <x-nav-link href="admin/category" :active="request()->routeIs('admin.category')">
-                            {{ __('Category') }}
-                        </x-nav-link>
+                    {{-- <x-nav-link href="product" :active="request()->routeIs('products.index')">
+                        {{ __('Product') }}
+                    </x-nav-link> --}}
 
-                        <x-nav-link href="admin/user" :active="request()->routeIs('admin.user')">
-                            {{ __('User') }}
-                        </x-nav-link>
+                    <x-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.index')">
+                        {{ __('Product') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
+                        {{ __('Category') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('brands.index') }}" :active="request()->routeIs('brands.index')">
+                        {{ __('Brands') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('tags.index') }}" :active="request()->routeIs('tags.index')">
+                        {{ __('Tags') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="#" :active="request()->routeIs('#')">
+                        {{ __('User') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="#" :active="request()->routeIs('#')">
+                        {{ __('Oder') }}
+                    </x-nav-link>
                     @endif
 
                     {{-- User Links --}}
                     @if (Auth::user()->role == 'user')
-                        <x-nav-link href="order" :active="request()->routeIs('user.order')">
-                            {{ __('Order') }}
-                        </x-nav-link>
+                    <x-nav-link href="{{ route('user.cart') }}" :active="request()->routeIs('user.cart')">
+                        {{ __('Cart') }}
+                    </x-nav-link>
+                    <x-nav-link href="order" :active="request()->routeIs('user.order')">
+                        {{ __('Order') }}
+                    </x-nav-link>
 
-                        <x-nav-link href="favorite" :active="request()->routeIs('user.favorite')">
-                            {{ __('Favorite') }}
-                        </x-nav-link>
+                    <x-nav-link href="favorite" :active="request()->routeIs('user.favorite')">
+                        {{ __('Favorite') }}
+                    </x-nav-link>
 
-                        <x-nav-link href="profile" :active="request()->routeIs('profile.edit')">
-                            {{ __('My Profile') }}
-                        </x-nav-link>
+                    <x-nav-link href="profile" :active="request()->routeIs('profile.edit')">
+                        {{ __('My Profile') }}
+                    </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -115,32 +135,32 @@
 
             {{-- Admin Links --}}
             @if (Auth::user()->role == 'admin')
-                <x-responsive-nav-link href="admin/product" :active="request()->routeIs('admin.product')">
-                    {{ __('Product') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link href="admin/product" :active="request()->routeIs('admin.product')">
+                {{ __('Product') }}
+            </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="admin/category" :active="request()->routeIs('admin.category')">
-                    {{ __('Category') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link href="admin/category" :active="request()->routeIs('admin.category')">
+                {{ __('Category') }}
+            </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="admin/user" :active="request()->routeIs('admin.user')">
-                    {{ __('User') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link href="admin/user" :active="request()->routeIs('admin.user')">
+                {{ __('User') }}
+            </x-responsive-nav-link>
             @endif
 
             {{-- User Links --}}
             @if (Auth::user()->role == 'user')
-                <x-responsive-nav-link href="order" :active="request()->routeIs('user.order')">
-                    {{ __('Order') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link href="order" :active="request()->routeIs('user.order')">
+                {{ __('Order') }}
+            </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="favorite" :active="request()->routeIs('user.favorite')">
-                    {{ __('Favorite') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link href="favorite" :active="request()->routeIs('user.favorite')">
+                {{ __('Favorite') }}
+            </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="profile" :active="request()->routeIs('profile.edit')">
-                    {{ __('My Profile') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link href="profile" :active="request()->routeIs('profile.edit')">
+                {{ __('My Profile') }}
+            </x-responsive-nav-link>
             @endif
 
         </div>
