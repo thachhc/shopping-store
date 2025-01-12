@@ -45,7 +45,5 @@ class Product extends Model
     {
         return $this->hasMany(SizeCode::class, 'product_id');
     }
-
-
     
 }

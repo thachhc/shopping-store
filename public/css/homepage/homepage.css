@@ -1,0 +1,446 @@
+.brand-title {
+    margin-top: 10rem;
+    /* padding: 10px; */
+    /* Adjust the padding value as needed */
+}
+
+.dont-miss-section {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10rem;
+}
+
+.dont-miss-container {
+    display: flex;
+    gap: 5px;
+    /* Space between posters */
+    margin-top: 5rem;
+    justify-content: center;
+}
+
+.dont-miss-poster {
+    width: 100%;
+    height: 85vh;
+    /* Adjust height as needed */
+    background-size: contain;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    /* Optional: rounds the corners */
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    /* Hide overflow to avoid showing clones */
+    position: relative;
+    /* Ensure positioning context */
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Transition out of view */
+.carousel-item-next,
+.carousel-item-prev {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+/* Smooth left-to-right animation for next item */
+.carousel-item-next.carousel-item-start,
+.carousel-item-prev.carousel-item-end {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.carousel-track {
+    display: flex;
+    /* Keep track in a flex container */
+    transition: transform 0.5s ease;
+    /* Smooth transition */
+}
+
+.product-panel {
+    flex: 0 0 auto;
+    /* Prevent shrinking */
+    width: 400px;
+    /* Fixed width for each panel */
+    margin-right: 10px;
+    /* Space between panels */
+    cursor: pointer;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    background: #fff !important; /* Circle background color */
+    border: none !important; /* Remove border */
+    border-radius: 50% !important; /* Make it circular */
+    width: 80px !important; /* Adjust size */
+    height: 80px !important; /* Adjust size */
+    display: flex !important; /* Center icon */
+    align-items: center !important; /* Center icon vertically */
+    justify-content: center !important; /* Center icon horizontally */
+    position: absolute !important; /* Keep position absolute for proper placement */
+    top: 50% !important; /* Center vertically */
+    transform: translateY(-50%) !important; /* Center vertically */
+    cursor: pointer !important; /* Pointer cursor */
+    z-index: 1 !important; /* Ensure the controls are on top */
+    background-color: rgba(0, 0, 0, 0.5) !important; /* Optional */
+}
+
+
+.carousel-control-prev {
+    left: 10px;
+    /* Position on the left */
+}
+
+.carousel-control-next {
+    right: 10px;
+    /* Position on the right */
+}
+
+.carousel-control-prev .fas,
+.carousel-control-next .fas {
+    color: black;
+    /* Set icon color */
+    font-size: 16px;
+    /* Adjust icon size */
+}
+
+/* Optional hover effect */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background: #e0e0e0;
+    /* Light background on hover */
+}
+
+.title-padding {
+    padding: 10px;
+    /* Adjust the padding value as needed */
+}
+
+.panel-padding {
+    padding: 10px;
+    /* Adjust the padding value as needed */
+}
+
+.slogan-big {
+    font-size: 5rem;
+    /* Adjust size as needed */
+    font-weight: bold;
+}
+
+.slogan-small {
+    font-size: 1rem;
+    /* Adjust size for elegance */
+    font-weight: normal;
+    /* Regular weight for the small text */
+    color: #777;
+    /* Optional: Change color to a lighter shade for elegance */
+}
+
+#promoCarousel,
+#videoCarousel {
+    margin: 0;
+    padding: 0;
+}
+
+.promo-title {
+    font-size: 1.25rem;
+    /* Increase font size for the title */
+    font-weight: bold;
+    /* Optional: make it bold */
+}
+
+.promo-subtitle {
+    font-size: 1.1rem;
+    /* Smaller size for the subtitle */
+    /* margin-bottom: 1rem; Add some space below the subtitle */
+    font-weight: 500;
+    /* Lighten the font weight */
+}
+
+.carousel-item {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#promoCarousel .carousel-inner h2 {
+    /* font-size: 1rem; */
+    /* Set to a smaller size, adjust as needed */
+    font-weight: 400;
+
+    /* Lighten the font weight */
+    text-transform: uppercase;
+    /* Make it more elegant */
+}
+
+/* Other styles remain the same */
+h3 {
+    font-size: 1.2rem;
+    /* Smaller size for section headings */
+    font-weight: 600;
+    /* Slightly bolder */
+    text-transform: uppercase;
+    /* Make it more elegant */
+    letter-spacing: 1px;
+    /* Add some spacing for elegance */
+}
+
+.brand-slogan {
+    font-size: 1rem;
+    /* Adjust size for brand slogans */
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    text-align: center;
+    /* Center align for elegance */
+}
+
+.carousel-inner h2 {
+    /* font-size: 1.5rem; */
+    /* Adjust size as needed */
+    font-weight: 400;
+    /* Lighten the font weight */
+    text-transform: uppercase;
+    /* Make it more elegant */
+}
+
+.brand-panel {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    height: 55vh;
+}
+
+.image-container {
+    width: 100%;
+    height: 350px;
+    /* Fixed height for all panels */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shoe-image {
+    width: 100%;
+    /* Auto width */
+    /* height: 100%; */
+    /* Full height of container */
+    object-fit: cover;
+    /* Cover the container */
+}
+
+.featured-title,
+.swn-title {
+    font-size: 2.5rem;
+    /* Adjust this size as needed */
+    font-weight: bold;
+    /* Make the text bold */
+    margin-bottom: 2rem;
+    /* Space below the title */
+}
+
+.featured-title {
+    color: #333;
+    /* Optional: Customize the color if needed */
+}
+
+.swn-title {
+    color: #333;
+    /* Optional: Customize the color if needed */
+}
+
+.first-image,
+.second-image {
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: opacity 0.5s ease;
+}
+
+.second-image {
+    opacity: 0;
+}
+
+.brand-panel:hover {
+    transform: scale(1.1) rotate(1deg);
+}
+
+.brand-panel:hover .first-image {
+    opacity: 0;
+}
+
+.brand-panel:hover .second-image {
+    opacity: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.brand-panel:hover .overlay {
+    transform: scale(1.05);
+}
+
+/* .brand-slogan {
+        font-size: 1.5rem;
+        margin-top: 10px;
+        opacity: 0;
+        animation: fadeIn 0.5s ease forwards;
+    } */
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.scrollable-new-products {
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    max-width: 100%;
+    /* Prevent overflow beyond the viewport */
+    padding: 10px 0;
+    /* Optional: Add padding */
+    margin: 0 auto;
+    /* Center the container */
+    box-sizing: border-box;
+    /* Include padding in total width */
+}
+
+.scrollable-new-products > div {
+    display: flex;
+    /* Use flexbox for the children to align horizontally */
+    white-space: nowrap;
+    /* Prevent line breaks within the container */
+}
+
+.scrollable-new-products > .d-flex {
+    white-space: nowrap;
+    /* Prevent line breaks within the container */
+}
+
+/* Optional: Prevent body overflow if needed */
+body {
+    overflow-x: hidden;
+    /* Prevent body from scrolling horizontally */
+}
+
+/* Optional: Prevent body overflow if needed */
+body {
+    overflow-x: hidden;
+    /* Prevent body from scrolling horizontally */
+}
+
+.scrollable-row {
+    padding-bottom: 10px;
+    max-height: 400px;
+}
+
+/* #promoCarousel .carousel-inner {
+        height: 200px;
+    } */
+
+.shoe-panel {
+    min-width: 200px;
+    margin-right: 20px;
+    /* Space between panels */
+    cursor: pointer;
+}
+
+.category-image {
+    height: 50vh;
+    /* Increased height for larger images */
+    /* background-size: contain; */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.category-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: #1a1b1e;
+    /* font-weight: bold; */
+    background: white;
+    padding: 7.5px 15px;
+    border-radius: 20px;
+}
+
+.scrollable-semi-carousel {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 20px;
+    /* Adds spacing between panels */
+}
+
+.scrollable-semi-carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.scrollable-semi-carousel::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.scrollable-semi-carousel::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+}
+
+.category-panel {
+    min-width: 35vw;
+    /* Fixed width for each panel */
+    flex-shrink: 0;
+    /* Prevents panels from shrinking */
+    /* border-radius: 8px; */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}

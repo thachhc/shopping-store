@@ -1,0 +1,240 @@
+ /* General body styles */
+ body {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+    /* box-sizing: border-box; */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between; /* Aligns items to the left and right */
+    align-items: center; /* Centers items vertically */
+    width: 100%;
+    margin-bottom: 20px; /* Optional: adds space below the header */
+}
+
+.header-title {
+    padding: 2rem 0; /* Adds space above and below the title */
+    font-size: 2rem; /* Adjust as needed */
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.brand-name {
+    font-size: 2.5rem; /* Larger size for brand name */
+    font-style: italic;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the items to the right */
+    width: 100%; /* Ensures it takes the full width of the parent container */
+}
+
+.filter-button {
+    font-size: 1.5rem !important; /* Adjust as needed */
+    padding: 10px 20px !important;
+}
+
+/* Filter Panel Styles */
+.filter-panel {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    /* Initially hide the panel off-screen */
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.035);
+    transition: left 0.3s ease;
+    /* Smooth transition for sliding in/out */
+    z-index: 9999;
+    padding: 20px;
+    overflow-y: auto;
+    /* Allow scrolling within the panel */
+    margin-top: 65px;
+    /* Prevent overlapping with navbar */
+}
+
+/* Active class to show the filter panel */
+.filter-panel.active {
+    left: 0;
+    /* Slide the panel into view */
+}
+
+/* Adjust the main content when the filter panel is active */
+.container {
+    transition: margin-left 0.3s ease;
+    /* Smooth transition for layout shift */
+}
+
+.container.filter-panel-active {
+    margin-left: 300px;
+    /* Space for the filter panel */
+}
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    background: #f8f9fa;
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    background-color: #e2e6ea;
+    /* Slight hover effect for better UX */
+}
+
+/* Dropdown content */
+.dropdown-content {
+    position: absolute;
+    background-color: #fff;
+    min-width: 100%;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    display: none;
+    /* Hidden by default */
+    padding: 5px 0;
+}
+
+.dropdown-content.show {
+    display: block;
+    /* Show the dropdown when toggled */
+}
+
+.dropdown-content div {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.dropdown-content div:hover {
+    background-color: #f1f1f1;
+    /* Highlight option on hover */
+}
+
+/* Filter group for category, size, and brand */
+.filter-group {
+    margin-bottom: 20px;
+}
+
+/* Button Styles */
+.apply-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apply-button:hover {
+    background-color: #0056b3;
+    /* Darken button color on hover */
+}
+
+/* Smooth scrolling behavior */
+html,
+body {
+    scroll-behavior: smooth;
+}
+
+/* Optional styling for checkboxes within dropdowns */
+.dropdown-content input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Add transition for checkbox change (for better UX) */
+.dropdown-content input[type="checkbox"]:checked {
+    background-color: #007bff;
+    /* Optionally change background color when selected */
+}
+
+/* Ensure filter panel closes properly when clicking outside */
+.filter-panel .close-filter {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+
+.filter-panel .close-filter:hover {
+    color: #333;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensures the image fits without distortion */
+    margin-bottom: 12px; /* Space between image and content */
+}
+
+.product-card, .card {
+    /* background-color: #f5f5f5; */
+    border: none !important; 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* padding: 16px; */
+    /* border-radius: 8px; Rounded corners */
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-tag {
+    color: #8B5C5A; /* Brownish-red color for the tag */
+    font-size: 1.25rem; /* Slightly larger font size */
+    font-weight: 600; /* Bold */
+    display: inline-block;
+    margin-bottom: 8px; /* Space between tag and name */
+}
+
+.product-name {
+    font-size: 1.5rem; /* Larger font size for product name */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    font-weight: 700; /* Bold */
+    margin-bottom: 10px; /* Space between name and prices */
+    color: #333; /* Dark color for the name */
+}
+
+.original-price {
+    /* text-decoration: line-through; */
+    font-size: 1.3rem; /* Slightly larger */
+    color: #888; /* Light grey for the original price */
+    margin-bottom: 4px; /* Space between prices */
+}
+
+.original-price.strikethrough {
+    text-decoration: line-through;
+    font-size: 1.1rem; /* Slightly larger */
+    color: #888; /* Optional: change color for better visual indication */
+}
+
+.sale-price {
+    font-size: 1.3rem; /* Larger font size for sale price */
+    font-weight: 700; /* Bold */
+    color: #e63946; /* Red for sale price */
+}
+
+.product-item {
+    flex: 0 0 33.3333%;
+    /* max-width: 33.333%; */
+}

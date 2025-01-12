@@ -1,0 +1,113 @@
+/* styles.css */
+
+/* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: #343a40;
+    color: #ffffff;
+    padding-top: 20px;
+    min-height: 100vh;
+}
+
+.sidebar .nav-item .nav-link {
+    color: #ffffff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.sidebar .nav-item .nav-link:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.sidebar .nav-item .nav-link.active {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+/* Main content area */
+.main-content {
+    text-align: center;
+    padding: 30px;
+}
+
+/* Button Styling */
+.btn-outline-info, .btn-outline-danger, .btn-outline-primary {
+    margin: 5px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.btn-outline-info:hover, .btn-outline-danger:hover, .btn-outline-primary:hover {
+    opacity: 0.8;
+}
+
+/* Form styling */
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Header and Titles */
+h1, .h2 {
+    
+    
+    text-align: center;
+    color: #343a40;
+    font-size: 24px;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+.text-center {
+    margin-bottom: 20px;
+}
+
+/* Adjust for modal dialogs */
+.modal-dialog {
+    max-width: 600px;
+}
+
+/* Utility classes */
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+.px-md-4 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-top: 15px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
