@@ -69,10 +69,7 @@ https://templatemo.com/tm-559-zay-shop
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('/')}}">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{url(path: '/demo')}}">Shop</a>
-                        </li>
+                        </li>                       
                         <li class="nav-item">
                             <a class="nav-link" href="{{url(path: '/products')}}">Product</a>
                         </li>
@@ -82,9 +79,13 @@ https://templatemo.com/tm-559-zay-shop
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('/')}}">Order</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url(path: '/cart')}}">Cart</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="navbar align-self-center d-flex">
+                    
                     <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
                         <div class="input-group">
                             <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
@@ -104,7 +105,6 @@ https://templatemo.com/tm-559-zay-shop
                     </a>
 
                     <!-- login -->
-
 
                     <a class="nav-icon position-relative text-decoration-none" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
