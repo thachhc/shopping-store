@@ -24,16 +24,15 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-
 //user routes
 Route::middleware(['auth', 'userMiddleware'])->group(function () {
     Route::get('dashboard', [HomepageController::class, 'index'])->name('dashboard');
     // Route::get('/', [HomepageController::class, 'index'])->name('welcome');
-    Route::get('/products', [ProductController::class, 'UserIndex'])->name('browse');
+    Route::get('/products', [ProductController::class, 'UserIndex'])->name('shop');
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
     Route::get('/brand/{brandId}', [ProductController::class, 'productsByBrand'])->name('brand.products');
     Route::get('/category/{categoryId}', [ProductController::class, 'productsByCategory'])->name('productsByCategory');
-    
+
     // Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -81,9 +80,6 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::patch('/admin/orders/{id}/status', [OrderAdminController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::get('/orders/{order_id}/details', [OrderAdminController::class, 'getProducts']);
     Route::get('/orders/search', [OrderAdminController::class, 'search'])->name('orders.search');
-   
-
-
-
-
 });
+Route::get('/products', [ProductController::class, 'UserIndex'])->name('shop');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');

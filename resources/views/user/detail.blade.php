@@ -253,7 +253,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <a href="{{ route('browse') }}" class="btn btn-secondary">Quay lại danh sách sản phẩm</a>
+                    <a href="{{ route('shop') }}" class="btn btn-secondary">Quay lại danh sách sản phẩm</a>
                 </div>
             </div>
         </div>

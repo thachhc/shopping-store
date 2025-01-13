@@ -20,7 +20,7 @@ class ProductController extends Controller
             'sizes' => 'array',
             'sizes.*' => 'numeric', // Ensure sizes are numeric
             'brands' => 'array|exists:brands,id',
-            'sort_by' => 'nullable|in:newest,sale,featured',
+            'sort_by' => 'nullable|in:newest,sale,featured,,name-asc,name-desc,price-asc,price-desc',
         ]);
 
         // Fetch all categories, sizes, and brands
@@ -63,7 +63,17 @@ class ProductController extends Controller
                 })->orderBy('created_at', 'desc');
             } elseif ($sortBy === 'sale') {
                 // Sort by price for sale and offers
+                $query->whereNotNull('price_sale')
+                    ->whereColumn('price_sale', '<', 'price')
+                    ->orderBy('price_sale', 'asc');
+            } elseif ($sortBy === 'name-asc') {
+                $query->orderBy('name', 'asc');
+            } elseif ($sortBy === 'name-desc') {
+                $query->orderBy('name', 'desc');
+            } elseif ($sortBy === 'price-asc') {
                 $query->orderBy('price', 'asc');
+            } elseif ($sortBy === 'price-desc') {
+                $query->orderBy('price', 'desc');
             } else { // Default to 'featured' or alphabetical order
                 // Filter products that have the "Trending" tag and order by name
                 $query->whereHas('tag', function ($q) {
@@ -82,7 +92,7 @@ class ProductController extends Controller
         $brand = $brandId ? Brand::findOrFail($brandId) : null;
 
         // Return the view with the filtered data
-        return view('browse.browse', compact('products', 'brand', 'categories', 'sizes', 'brands'));
+        return view('shop', compact('products', 'brand', 'categories', 'sizes', 'brands'));
     }
 
     public function UserSearch(Request $request)
@@ -96,6 +106,34 @@ class ProductController extends Controller
         $categories = Category::all();
 
         return view('products.index', compact('products', 'categories'));
+    }
+    public function sortBy($query, $sortBy)
+    {
+        switch ($sortBy) {
+            case 'newest':
+                return $query->whereHas('tag', function ($q) {
+                    $q->where('name', 'New Arrivals');
+                })->orderBy('created_at', 'desc');
+
+            case 'sale':
+                return $query->whereNotNull('price_sale')
+                    ->whereColumn('price_sale', '<', 'price')
+                    ->orderBy('price_sale', 'asc');
+            case 'featured':
+                return $query->whereHas('tag', function ($q) {
+                    $q->where('name', 'Trending');
+                })->orderBy('name');
+            case 'name-asc':
+                return $query->orderBy('name', 'asc');
+            case 'name-desc':
+                return $query->orderBy('name', 'desc');
+            case 'price-asc':
+                return $query->orderBy('price', 'asc');
+            case 'price-desc':
+                return $query->orderBy('price', 'desc');
+            default:
+                return $query->orderBy('name');
+        }
     }
 
     public function productsByBrand(Request $request, $brandId = null)
@@ -127,12 +165,7 @@ class ProductController extends Controller
             $query->whereIn('category_id', $validated['category_id']);
         }
 
-        // Filter by sizes if provided
-        if (!empty($validated['sizes'] ?? null)) {
-            $query->whereHas('sizes', function ($q) use ($validated) {
-                $q->whereIn('sizenumber', $validated['sizes']);
-            });
-        }
+
 
         // Filter by brands if provided (this is redundant since we already filtered by brand_id)
         if (!empty($validated['brands'] ?? null)) {
@@ -142,20 +175,7 @@ class ProductController extends Controller
         // Sort products based on the 'sort_by' parameter if provided
         $sortBy = $validated['sort_by'] ?? null;
         if ($sortBy) {
-            if ($sortBy === 'newest') {
-                // Filter products that have the "New Arrivals" tag and order by creation date
-                $query->whereHas('tag', function ($q) {
-                    $q->where('name', 'New Arrivals');
-                })->orderBy('created_at', 'desc');
-            } elseif ($sortBy === 'sale') {
-                // Sort by price for sale and offers
-                $query->orderBy('price', 'asc');
-            } else { // Default to 'featured' or alphabetical order
-                // Filter products that have the "Trending" tag and order by name
-                $query->whereHas('tag', function ($q) {
-                    $q->where('name', 'Trending');
-                })->orderBy('name');
-            }
+            $query = $this->sortBy($query, $sortBy);
         } else {
             // Default sort order if no sort_by parameter is provided
             $query->orderBy('name');
@@ -168,7 +188,7 @@ class ProductController extends Controller
         $brand = $brandId ? Brand::findOrFail($brandId) : null;
 
         // Return the view with the filtered data
-        return view('browse.browse', compact('products', 'brand', 'categories', 'sizes', 'brands'));
+        return view('shop', compact('products', 'brand', 'categories', 'sizes', 'brands'));
     }
 
     public function productsByCategory(Request $request, $categoryId = null)
@@ -215,20 +235,7 @@ class ProductController extends Controller
         // Sort products based on the 'sort_by' parameter if provided
         $sortBy = $validated['sort_by'] ?? null;
         if ($sortBy) {
-            if ($sortBy === 'newest') {
-                // Filter products that have the "New Arrivals" tag and order by creation date
-                $query->whereHas('tag', function ($q) {
-                    $q->where('name', 'New Arrivals');
-                })->orderBy('created_at', 'desc');
-            } elseif ($sortBy === 'sale') {
-                // Sort by price for sale and offers
-                $query->orderBy('price', 'asc');
-            } else { // Default to 'featured' or alphabetical order
-                // Filter products that have the "Trending" tag and order by name
-                $query->whereHas('tag', function ($q) {
-                    $q->where('name', 'Trending');
-                })->orderBy('name');
-            }
+            $query = $this->sortBy($query, $sortBy);
         } else {
             // Default sort order if no sort_by parameter is provided
             $query->orderBy('name');
@@ -241,7 +248,7 @@ class ProductController extends Controller
         $category = $categoryId ? Category::findOrFail($categoryId) : null;
 
         // Return the view with the filtered data
-        return view('browse.browse', compact('products', 'category', 'categories', 'sizes', 'brands'));
+        return view('shop', compact('products', 'category', 'categories', 'sizes', 'brands'));
     }
 
     /*---------------------------------------------------------ADMIN----------------------------------------------------------------*/     

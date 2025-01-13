@@ -69,7 +69,7 @@ class HomepageController extends Controller
         // Execute query
         $products = $products->get();
 
-        return view('browse.browse', compact('products', 'brand', 'categories'));
+        return view('shop', compact('products', 'brand', 'categories'));
     }
 
     // Display product details

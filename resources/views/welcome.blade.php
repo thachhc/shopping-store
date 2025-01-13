@@ -1,379 +1,475 @@
-@extends('layouts.front')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('meta')
-<meta name="description" content=" about your webstie">
-@endsection
+<head>
+    <title>Shoe Shop eCommerce HTML CSS Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@section('title')
-<title>Homepage</title>
-@endsection
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-@section('style')
-<link rel="stylesheet" href="{{ asset('css\homepage\homepage.css') }}">
-@endsection
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
 
-@section('content')
-<div class="container-fluid" style="max-width: 100%; margin: 0 auto;"> <!-- Updated to use container-fluid -->
-
-<!-- Carousel Section -->
-<div id="promoCarousel" class="carousel slide mt-4 mx-auto" data-bs-ride="carousel" data-bs-interval="3000" style="max-width: 40%; height: auto;">
-    <div class="carousel-inner" style="text-align: center;">
-        <div class="carousel-item active">
-            <div class="carousel-content">
-                <h2 class="text-center promo-title">New Styles On Sale: Up To 40% Off</h2>
-                <p class="lead promo-subtitle">Shop All Our New Markdowns</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="carousel-content">
-                <h2 class="text-center promo-title">Move, Shop, Customise & Celebrate With Us</h2>
-                <p class="lead promo-subtitle">No matter what you feel like doing today, it’s better as a Member.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="carousel-content">
-                <h2 class="text-center promo-title">Free Standard Delivery & 30-Day Free Returns</h2>
-                <p class="lead promo-subtitle">Join Now</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Carousel Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev" hidden>
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next" hidden>
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-
-        <!-- Main Video Carousel Section -->
-        <!-- <div class="d-flex justify-content-center mt-5 mb-4">
-        <div id="mainVideoCarousel" class="carousel slide video-panel" data-bs-ride="carousel" data-bs-interval="" style="width: 95vw;">
-            <div class="carousel-inner">
-                @php
-
-                // Filter brands that have videos and shuffle them
-                $videoBrands = $brands->filter(function($brand) {
-                $videoDirectory = public_path("storage/Brands/{$brand->name}/Videos");
-                $videoFiles = File::glob("$videoDirectory/*.mp4");
-                return !empty($videoFiles);
-                })->shuffle(); // Shuffle the filtered brands
-                @endphp
-
-                @foreach($videoBrands as $index => $brand)
-                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                    <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 85vh;">
-                        @php
-                        // Get the first .mp4 video file from the directory
-                        $videoDirectory = public_path("storage/Brands/{$brand->name}/Videos");
-                        $videoFiles = File::glob("$videoDirectory/*.mp4");
-                        $videoURL = $videoFiles ? asset("storage/Brands/{$brand->name}/Videos/" . basename($videoFiles[0])) : '';
-                        @endphp
-                        @if($videoURL)
-                        <video src="{{ $videoURL }}" autoplay muted loop style="width: 100%; height: 100%; object-fit: cover;" playsinline></video>
-                        @endif
-                    </div>
-                    <h4 class="text-center mt-2 slogan-big">Watch Our New Collection from {{ $brand->name }}!</h4>
-                    <h5 class="text-center mt-1 slogan-small">Explore our latest trends today!</h5>
-                </div>
-                @endforeach
-            </div> -->
-
-            <!-- Carousel Controls (hidden) -->
-            <!-- <a class="carousel-control-prev d-none" href="#mainVideoCarousel" role="button" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </a>
-            <a class="carousel-control-next d-none" href="#mainVideoCarousel" role="button" data-bs-slide="next">
-                <span class="visually-hidden">Next</span>
-            </a>
-        </div>
-    </div> -->
-
-
-    <!-- Featured Panels Section -->
-    <div class="row mt-5" style="margin-bottom: 10%;">
-        <div class="col-12">
-            <div class="text-center mb-4" style="padding: 10px; margin-top: 2.5%;">
-                <h3 class="featured-title">Featured Shoes</h3>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="carousel-wrapper">
-                <button class="carousel-control-prev" type="button" id="prevBtn" aria-label="Previous">
-                    <span class="fas fa-chevron-left"></span>
-                </button>
-                <div id="featuredCarousel" class="carousel-inner">
-                    <div class="carousel-track d-flex">
-                        @foreach($brands as $brand)
-                            @php
-                            // Get products with the "Trending" tag for each brand, sorted by total quantity in descending order, limited to 10
-                            $trendingProducts = $brand->products()
-                                ->whereHas('tag', function($query) {
-                                    $query->where('name', 'Trending');
-                                })
-                                ->withSum('sizes as total_quantity', 'quantity') // Add total quantity for each product
-                                ->orderBy('total_quantity', 'desc') // Sort by the calculated total quantity
-                                ->take(10)
-                                ->get();
-                            @endphp
-                            @foreach($trendingProducts as $product)
-                                @php
-                                $images = json_decode($product->image, true);
-                                $image_url = $images[0] ?? '';
-                                $price = $product->price ?? ''; // Assuming there's a price attribute
-                                @endphp
-                                @if($image_url)
-                                     <a href="/products/{{ $product->id }}" class="product-link">                                        <div class="product-panel">
-                                            <div class="image-container">
-                                                <img src="{{ asset($image_url) }}" alt="{{ $product->name }}" class="shoe-image img-fluid mb-2">
-                                            </div>
-                                            <h5 class="text-center">{{ $product->name }}</h5>
-                                            @if($price)
-                                                <p class="text-center price-tag">{{ number_format($price, 0) }} VND</p> <!-- Assuming 1 USD = 23,000 VND -->
-                                            @endif
-                                        </div>
-                                    </a>
-                                @endif
-                            @endforeach
-                        @endforeach
-                    </div>
-                    <button class="carousel-control-next" type="button" id="nextBtn" aria-label="Next">
-                        <span class="fas fa-chevron-right"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+    <!--
     
-    <!-- Don't Miss Section -->
-    <div class="dont-miss-section">
-    <!-- Single Title for Both Posters -->
-    <h4 class="slogan-big">LIMITED-TIME HIGHLIGHTS</h4>
+TemplateMo 559 Zay Shop
 
-    <!-- Container for Both Posters -->
-    <div class="dont-miss-container">
-        <!-- First Poster Panel -->
-        <div class="dont-miss-poster" id="dontMissPoster1"></div>
+https://templatemo.com/tm-559-zay-shop
 
-        <!-- Second Poster Panel -->
-        <div class="dont-miss-poster" id="dontMissPoster2"></div>
-        </div>
-    </div>
+-->
+</head>
 
 
-    <!-- See What's New Section -->
-    <div class="row mt-5" style="margin-bottom: 10%;">
-        <div class="col-12">
-            <div class="text-center mb-4" style="padding: 10px; margin-top: 2.5%;">
-                <h3 class="featured-title">New Arrivals</h3>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="carousel-wrapper">
-                <button class="carousel-control-prev" type="button" id="prevBtn" aria-label="Previous">
-                    <span class="fas fa-chevron-left"></span>
-                </button>
-                <div id="featuredCarousel" class="carousel-inner">
-                    <div class="carousel-track d-flex">
-                        @foreach($brands as $brand)
-                        @php
-                        // Get products with the "New Arrivals" tag for each brand, sorted by total quantity in descending order, limited to 10
-                        $newArrivals = $brand->products()
-                            ->whereHas('tag', function($query) {
-                                $query->where('name', 'New Arrivals');
-                            })
-                            ->withSum('sizes as total_quantity', 'quantity') // Add total quantity for each product
-                            ->orderBy('total_quantity', 'desc') // Sort by the calculated total quantity
-                            ->take(10)
-                            ->get();
-                        @endphp
-                        @foreach($newArrivals as $product)
-                        @php
-                        $images = json_decode($product->image, true);
-                        $image_url = $images[0] ?? '';
-                        $price = $product->price ?? ''; // Assuming there's a price attribute
-                        @endphp
-                        @if($image_url)
-                        <a href="/products/{{ $product->id }}" class="product-link">
-                            <div class="product-panel">
-                                <div class="image-container">
-                                    <img src="{{ asset($image_url) }}" alt="{{ $product->name }}" class="shoe-image img-fluid mb-2">
-                                </div>
-                                <h5 class="text-center">{{ $product->name }}</h5>
-                                @if($price)
-                                <p class="text-center price-tag">{{ number_format($price, 0) }} VND</p> <!-- Assuming 1 USD = 23,000 VND -->
-                                @endif
-                            </div>
-                        </a>
-                        @endif
-                        @endforeach
-                        @endforeach
-                    </div>
-                    <button class="carousel-control-next" type="button" id="nextBtn" aria-label="Next">
-                        <span class="fas fa-chevron-right"></span>
-                    </button>
+<body>
+    <!-- Start Top Nav -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+        <div class="container text-light">
+            <div class="w-100 d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-envelope mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="mailto:info@company.com">thach.hc2410@gmail.com</a>
+                    <i class="fa fa-phone mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
+                </div>
+                <div>
+                    <a class="text-light" href="https://fb.com/templatemo" target="_blank" rel="sponsored"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://twitter.com/" target="_blank"><i class="fab fa-twitter fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin fa-sm fa-fw"></i></a>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
+    <!-- Close Top Nav -->
 
 
-    <!-- Shop by Sport Section -->
-    <div class="row mt-5 mb-5"> <!-- Add `mb-5` here to create bottom margin -->
-        <div class="col-12">
-            <div class="text-center mb-4" style="padding: 10px;">
-                <h4 class="slogan-big">SHOP BY SPORT</h4>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="scrollable-semi-carousel">
-                @foreach($categories as $category)
-                @php
-                $categoryPath = public_path("storage/ShopBySport/{$category->name}");
+    <!-- Nav -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
 
-                // Get all image files in the category's directory
-                $images = File::files($categoryPath);
+            <a class="navbar-brand text-success logo h1 align-self-center" href="{{url('/')}}">
+                Shoe
+            </a>
 
-                // Set the first image as the background or use a fallback
-                $categoryImage = isset($images[0])
-                ? asset("storage/ShopBySport/{$category->name}/" . $images[0]->getFilename())
-                : 'https://path-to-high-res-fallback-image.jpg';
-                @endphp
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <!-- Link the category panel to a productsByCategory route -->
-                <a href="{{ route('productsByCategory', ['categoryId' => $category->id]) }}" class="category-panel-link">
-                    <div class="category-panel">
-                        <div class="category-image" style="background-image: url('{{ $categoryImage }}');">
-                            <h6 class="category-text">{{ $category->name }}</h6>
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('/')}}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('/')}}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url(path: '/demo')}}">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url(path: '/products')}}">Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('/')}}">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('/')}}">Order</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                            <div class="input-group-text">
+                                <i class="fa fa-fw fa-search"></i>
+                            </div>
                         </div>
                     </div>
-                </a>
-                @endforeach
+                    <!-- Search -->
+                    <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
+                        <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                    </a>
+                    <!-- Cart -->
+                    <a class="nav-icon position-relative text-decoration-none" href="{{url('/cart')}}">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+
+                    <!-- login -->
+
+
+                    <a class="nav-icon position-relative text-decoration-none" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+
+                    <!-- Dropdown -->
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        @auth
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                            {{ __('Profile') }}
+                        </a>
+                        <a class="dropdown-item" href="{{ Auth::user()->role == 'admin' ? url('/admin/dashboard') : url('/dashboard') }}">
+                            {{ __('Dashboard') }}
+                        </a>
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
+                        @else
+                        <a class="dropdown-item" href="{{ url('/login') }}" :active="request()->routeIs('login')">
+                            {{ __('Login') }}
+                        </a>
+
+                        @if (Route::has('register'))
+                        <a class="dropdown-item" href="{{ url('/register') }}" :active="request()->routeIs('register')">
+                            {{ __('Register') }}
+                        </a>
+                        @endif
+                        @endauth
+                    </div>
+                </div>
             </div>
+
+        </div>
+    </nav>
+    <!-- Close Nav -->
+
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Title for Featured Panels Section -->
-    <div class="brand-title text-center mb-4" style="padding: 10px;">
-        <h3 class="slogan-big">"Discover the Icons of Style!"</h3>
-        <p class="featured-subtitle">Explore Top Brands That Redefine Every Step</p>
-    </div>
 
-    <!-- Featured Panels Section -->
-<div class="row mt-4">
-    @foreach($brands as $brand)
-    @php
-        $brandPath = public_path("storage/Brands/{$brand->name}/Images");
 
-        // Get all image files in the directory
-        $images = File::files($brandPath);
-
-        // Define a fallback image
-        $fallbackImage = 'https://path-to-high-res-fallback-image.jpg';
-
-        // Use the first two images found in the directory, if available
-        $firstImage = isset($images[0]) ? asset("storage/Brands/{$brand->name}/Images/" . $images[0]->getFilename()) : $fallbackImage;
-        $secondImage = isset($images[1]) ? asset("storage/Brands/{$brand->name}/Images/" . $images[1]->getFilename()) : $fallbackImage;
-    @endphp
-
-    <div class="col-md-4 mb-4">
-        <!-- Link to the products by brand page -->
-        <a href="{{ route('brand.products', ['brandId' => $brand->id]) }}" class="text-decoration-none">
-            <div class="brand-panel position-relative">
-                <div class="image-container">
-                    <div class="first-image" style="background-image: url('{{ $firstImage }}');"></div>
-                    <div class="second-image" style="background-image: url('{{ $secondImage }}');"></div>
-                </div>
-                <div class="overlay">
-                    <h3>{{ $brand->name }}</h3>
-                    <p class="brand-slogan">"Step Up Your Game with {{ $brand->name }}!"</p>
+    <!-- Start Banner Hero -->
+    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/banner_img_01.jpg" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left align-self-center">
+                                <h1 class="h1 text-success"><b>Zay</b> eCommerce</h1>
+                                <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
+                                <p>
+                                    Zay Shop is an eCommerce HTML5 CSS template with latest version of Bootstrap 5 (beta 1).
+                                    This template is 100% free provided by <a rel="sponsored" class="text-success" href="https://templatemo.com" target="_blank">TemplateMo</a> website.
+                                    Image credits go to <a rel="sponsored" class="text-success" href="https://stories.freepik.com/" target="_blank">Freepik Stories</a>,
+                                    <a rel="sponsored" class="text-success" href="https://unsplash.com/" target="_blank">Unsplash</a> and
+                                    <a rel="sponsored" class="text-success" href="https://icons8.com/" target="_blank">Icons 8</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/banner_img_02.jpg" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Proident occaecat</h1>
+                                <h3 class="h2">Aliquip ex ea commodo consequat</h3>
+                                <p>
+                                    You are permitted to use this Zay CSS template for your commercial websites.
+                                    You are <strong>not permitted</strong> to re-distribute the template ZIP file in any kind of template collection websites.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="./assets/img/banner_img_03.jpg" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h1 class="h1">Repr in voluptate</h1>
+                                <h3 class="h2">Ullamco laboris nisi ut </h3>
+                                <p>
+                                    We bring you 100% free CSS templates for your websites.
+                                    If you wish to support TemplateMo, please make a small contribution via PayPal or tell your friends about our website. Thank you.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
         </a>
     </div>
-    @endforeach
-</div>
-</div>
+    <!-- End Banner Hero -->
 
-@endsection
 
-@section('script')
+    <!-- Start Categories of The Month -->
+    <section class="container py-5">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Categories of The Month</h1>
+                <p>
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3">Watches</h5>
+                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Shoes</h2>
+                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Accessories</h2>
+                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+            </div>
+        </div>
+    </section>
+    <!-- End Categories of The Month -->
 
-<script>
-    //
-        document.addEventListener('DOMContentLoaded', function() {
-        const track = document.querySelector('.carousel-track');
-        const panels = Array.from(document.querySelectorAll('.product-panel'));
-        const totalPanels = panels.length; // Count of product panels
-        const panelWidth = 400; // Width of each panel
-        let currentIndex = 0; // Start at the first panel
-        let isAnimating = false; // To prevent multiple clicks during animation
 
-        // Move the carousel
-        function moveCarousel(direction) {
-            if (isAnimating) return; // Prevent further clicks while animating
-            isAnimating = true; // Set animating to true
+    <!-- Start Featured Product -->
+    <section class="bg-light">
+        <div class="container py-5">
+            <div class="row text-center py-3">
+                <div class="col-lg-6 m-auto">
+                    <h1 class="h1">Featured Product</h1>
+                    <p>
+                        Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="shop-single.html">
+                            <img src="./assets/img/feature_prod_01.jpg" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$240.00</li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Gym Weight</a>
+                            <p class="card-text">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt in culpa qui officia deserunt.
+                            </p>
+                            <p class="text-muted">Reviews (24)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="shop-single.html">
+                            <img src="./assets/img/feature_prod_02.jpg" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$480.00</li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Cloud Nike Shoes</a>
+                            <p class="card-text">
+                                Aenean gravida dignissim finibus. Nullam ipsum diam, posuere vitae pharetra sed, commodo ullamcorper.
+                            </p>
+                            <p class="text-muted">Reviews (48)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="shop-single.html">
+                            <img src="./assets/img/feature_prod_03.jpg" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                    <i class="text-warning fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">$360.00</li>
+                            </ul>
+                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Summer Addides Shoes</a>
+                            <p class="card-text">
+                                Curabitur ac mi sit amet diam luctus porta. Phasellus pulvinar sagittis diam, et scelerisque ipsum lobortis nec.
+                            </p>
+                            <p class="text-muted">Reviews (74)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Featured Product -->
 
-            currentIndex += direction;
 
-            // Ensure currentIndex stays within bounds
-            if (currentIndex < 0) {
-                currentIndex = 0;
-            } else if (currentIndex >= totalPanels) {
-                currentIndex = totalPanels - 1;
-            }
+    <!-- Start Footer -->
+    <footer class="bg-dark" id="tempaltemo_footer">
+        <div class="container">
+            <div class="row">
 
-            // Apply the transition
-            track.style.transition = 'transform 0.5s ease';
-            track.style.transform = 'translateX(' + (-currentIndex * panelWidth) + 'px)';
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Zay Shop</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt fa-fw"></i>
+                            123 Consectetur at ligula 10660
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a class="text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a class="text-decoration-none" href="mailto:info@company.com">info@company.com</a>
+                        </li>
+                    </ul>
+                </div>
 
-            // Listen for the transition end to reset animating state
-            track.addEventListener('transitionend', () => {
-                isAnimating = false; // Allow new clicks after animation is done
-            }, { once: true });
-        }
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Luxury</a></li>
+                        <li><a class="text-decoration-none" href="#">Sport Wear</a></li>
+                        <li><a class="text-decoration-none" href="#">Men's Shoes</a></li>
+                        <li><a class="text-decoration-none" href="#">Women's Shoes</a></li>
+                        <li><a class="text-decoration-none" href="#">Popular Dress</a></li>
+                        <li><a class="text-decoration-none" href="#">Gym Accessories</a></li>
+                        <li><a class="text-decoration-none" href="#">Sport Shoes</a></li>
+                    </ul>
+                </div>
 
-        // Event listeners for buttons
-        document.getElementById('prevBtn').addEventListener('click', function() {
-            moveCarousel(-1);
-        });
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Further Info</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Home</a></li>
+                        <li><a class="text-decoration-none" href="#">About Us</a></li>
+                        <li><a class="text-decoration-none" href="#">Shop Locations</a></li>
+                        <li><a class="text-decoration-none" href="#">FAQs</a></li>
+                        <li><a class="text-decoration-none" href="#">Contact</a></li>
+                    </ul>
+                </div>
 
-        document.getElementById('nextBtn').addEventListener('click', function() {
-            moveCarousel(1);
-        });
-    });
+            </div>
 
-    //Don't Miss Carousel
-    const images1 = {!! json_encode($poster1Images) !!}; // First set of images
-    const images2 = {!! json_encode($poster2Images) !!}; // Second set of images
-    let currentIndex1 = 0;
-    let currentIndex2 = 0;
+            <div class="row text-light mb-4">
+                <div class="col-12 mb-3">
+                    <div class="w-100 my-3 border-top border-light"></div>
+                </div>
+                <div class="col-auto me-auto">
+                    <ul class="list-inline text-left footer-icons">
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i class="fab fa-twitter fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-auto">
+                    <label class="sr-only" for="subscribeEmail">Email address</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail" placeholder="Email address">
+                        <div class="input-group-text btn-success text-light">Subscribe</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    function changeImage() {
-        const poster1 = document.getElementById('dontMissPoster1');
-        const poster2 = document.getElementById('dontMissPoster2');
+        <div class="w-100 bg-black py-3">
+            <div class="container">
+                <div class="row pt-2">
+                    <div class="col-12">
+                        <p class="text-left text-light">
+                            Copyright &copy; 2021 Company Name
+                            | Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank">TemplateMo</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        if (poster1 && images1.length > 0) {
-            poster1.style.backgroundImage = `url('${images1[currentIndex1]}')`;
-            currentIndex1 = (currentIndex1 + 1) % images1.length; // Cycle through images for poster 1
-        }
+    </footer>
+    <!-- End Footer -->
 
-        if (poster2 && images2.length > 0) {
-            poster2.style.backgroundImage = `url('${images2[currentIndex2]}')`;
-            currentIndex2 = (currentIndex2 + 1) % images2.length; // Cycle through images for poster 2
-        }
-    }
+    <!-- Start Script -->
+    <script src="assets/js/jquery-1.11.0.min.js"></script>
+    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/templatemo.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <!-- End Script -->
+</body>
 
-    // Initialize the first images
-    changeImage();
-    // Change images every 5 seconds
-    setInterval(changeImage, 10000);
-</script>
 
-@endsection
+</html>
