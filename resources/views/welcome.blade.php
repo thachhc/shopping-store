@@ -69,7 +69,7 @@ https://templatemo.com/tm-559-zay-shop
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('/')}}">About</a>
-                        </li>                       
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url(path: '/products')}}">Product</a>
                         </li>
@@ -79,13 +79,11 @@ https://templatemo.com/tm-559-zay-shop
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('/')}}">Order</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{url(path: '/cart')}}">Cart</a>
-                        </li>
+
                     </ul>
                 </div>
                 <div class="navbar align-self-center d-flex">
-                    
+
                     <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
                         <div class="input-group">
                             <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
@@ -111,13 +109,15 @@ https://templatemo.com/tm-559-zay-shop
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
 
+
                     <!-- Dropdown -->
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         @auth
+                        <div class="dropdown-item"> Hi, {{ Auth::user()->name }}</div>
                         <a class="dropdown-item" href="{{ route('profile.edit') }}">
                             {{ __('Profile') }}
                         </a>
-                        <a class="dropdown-item" href="{{ Auth::user()->role == 'admin' ? url('/admin/dashboard') : url('/dashboard') }}">
+                        <a class="dropdown-item" href="{{ Auth::user()->role == 'admin' ? url('/admin/dashboard') : url('/') }}">
                             {{ __('Dashboard') }}
                         </a>
                         <!-- Authentication -->
@@ -131,7 +131,6 @@ https://templatemo.com/tm-559-zay-shop
                         <a class="dropdown-item" href="{{ url('/login') }}" :active="request()->routeIs('login')">
                             {{ __('Login') }}
                         </a>
-
                         @if (Route::has('register'))
                         <a class="dropdown-item" href="{{ url('/register') }}" :active="request()->routeIs('register')">
                             {{ __('Register') }}
@@ -145,7 +144,6 @@ https://templatemo.com/tm-559-zay-shop
         </div>
     </nav>
     <!-- Close Nav -->
-
     <!-- Modal -->
     <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -248,29 +246,30 @@ https://templatemo.com/tm-559-zay-shop
     <section class="container py-5">
         <div class="row text-center pt-3">
             <div class="col-lg-6 m-auto">
-                <h1 class="h1">Categories of The Month</h1>
-                <p>
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
-                </p>
+                <h1 class="h1">Special Sale Products</h1>
+                <p>Discover our special deals and discounts for this month!</p>
             </div>
         </div>
         <div class="row">
+            @foreach ($saleProducts as $product)
+            @php
+            // Giải mã JSON thành mảng
+            $images = json_decode($product->image, true);
+            @endphp
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="./assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
-                <h5 class="text-center mt-3 mb-3">Watches</h5>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+                {{-- Hiển thị hình ảnh đầu tiên nếu có --}}
+                @if (!empty($images) && isset($images[0]))
+                <a href="#"><img src="{{ asset($images[0]) }}" class="rounded-circle img-fluid border" alt="{{ $product->name }}"></a>
+                @else
+                <a href="#"><img src="{{ asset('default-image.jpg') }}" class="rounded-circle img-fluid border" alt="No Image"></a>
+                @endif
+                <h5 class="text-center mt-3 mb-3">{{ $product->name }}</h5>
+                <p class="text-center text-danger">Sale Price: {{ number_format($product->price_sale, 2) }}$</p>
+                <p class="text-center">
+                    <a href="{{ url('products/' . $product->id) }}" class="btn btn-success">View Product</a>
+                </p>
             </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="./assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Shoes</h2>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
-            </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="./assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Accessories</h2>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
-            </div>
+            @endforeach
         </div>
     </section>
     <!-- End Categories of The Month -->
@@ -373,11 +372,11 @@ https://templatemo.com/tm-559-zay-shop
             <div class="row">
 
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Zay Shop</h2>
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Shoes Shop</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li>
                             <i class="fas fa-map-marker-alt fa-fw"></i>
-                            123 Consectetur at ligula 10660
+                            7 Thành Thái, Q.10, Tp.Hồ Chí Minh
                         </li>
                         <li>
                             <i class="fa fa-phone fa-fw"></i>
@@ -393,12 +392,12 @@ https://templatemo.com/tm-559-zay-shop
                 <div class="col-md-4 pt-5">
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Luxury</a></li>
+                        <li><a class="text-decoration-none" href="#">Nike</a></li>
                         <li><a class="text-decoration-none" href="#">Sport Wear</a></li>
-                        <li><a class="text-decoration-none" href="#">Men's Shoes</a></li>
-                        <li><a class="text-decoration-none" href="#">Women's Shoes</a></li>
-                        <li><a class="text-decoration-none" href="#">Popular Dress</a></li>
-                        <li><a class="text-decoration-none" href="#">Gym Accessories</a></li>
+                        <li><a class="text-decoration-none" href="#">Sneakers Shoes</a></li>
+                        <li><a class="text-decoration-none" href="#">Basketball Shoes</a></li>
+                        <li><a class="text-decoration-none" href="#">Fashion Shoes </a></li>
+                        <li><a class="text-decoration-none" href="#">Boots Shoes </a></li>
                         <li><a class="text-decoration-none" href="#">Sport Shoes</a></li>
                     </ul>
                 </div>

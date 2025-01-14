@@ -24,7 +24,11 @@ class HomepageController extends Controller
         // Fetch "Don't Miss" images
         [$poster1Images, $poster2Images] = $this->getDontMissImages();
 
-        return view('welcome', compact('randomProducts', 'brands', 'categories', 'poster1Images', 'poster2Images'));
+        $saleProducts = Product::whereHas('tag', function ($query) {
+            $query->where('name', 'sale');
+        })->get();
+
+        return view('welcome', compact('randomProducts', 'brands', 'categories', 'poster1Images', 'poster2Images','saleProducts'));
     }
 
     // Fetch "Don't Miss" images from storage

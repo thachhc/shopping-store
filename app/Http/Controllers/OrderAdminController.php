@@ -102,7 +102,6 @@ class OrderAdminController extends Controller
                 $query->where('name', 'like', '%' . $searchTerm . '%');
             })
             ->get();
-
         // Trả về kết quả tìm kiếm qua view
         return view('admin.orders.index', compact('orders'));
     }

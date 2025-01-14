@@ -5,6 +5,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 @endsection
 @section('content')
+
+
+
 <div class="container">
     <h1>Your Shopping Cart</h1>
 
@@ -87,7 +90,7 @@
                 @endforeach
             </tbody>
         </table>
-        <h4>Total Price: {{ number_format($totalPrice, 0, ',', '.') }} VND</h4>
+        <h4 style="font-size: 24px; font-weight: bold; text-align: right;">Total Price: {{ number_format($totalPrice, 0, ',', '.') }} VND</h4>
 
         <a href="{{ route('dashboard') }}" class="btn btn-primary">Continue Shopping</a>
 

@@ -12,9 +12,10 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Container\Attributes\Tag;
 use App\Http\Controllers\OrderAdminController;
+use App\Http\Controllers\User\UserController;
 
-Route::get('/', [HomepageController::class, 'index'])->name('homepage');
-
+// Route::get('/', [HomepageController::class, 'index'])->name('homepage');
+Route::get('/', [UserController::class, 'welcome'])->name('welcome');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

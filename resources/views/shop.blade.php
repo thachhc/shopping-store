@@ -66,10 +66,6 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url('/demo')}}">Shop</a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link" href="{{url(path: '/products')}}">Product</a>
                         </li>
 
@@ -99,7 +95,7 @@
                     <!-- Cart -->
                     <a class="nav-icon position-relative text-decoration-none" href="{{url('/cart')}}">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
 
                     <!-- login -->
@@ -108,10 +104,12 @@
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
+                    
 
                     <!-- Dropdown -->
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         @auth
+                        
                         <a class="dropdown-item" href="{{ route('profile.edit') }}">
                             {{ __('Profile') }}
                         </a>
@@ -298,11 +296,9 @@
 
 
                     <div class="col-md-4">
-
-
                         <div class="card mb-4 product-wap rounded-0">
                             <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="{{ asset($image_url) }}" alt="{{ $product->name }}">
+                                <img class="card-img rounded-0 img-fluid" style="min-height: 302px;" src="{{ asset($image_url) }}" alt="{{ $product->name }}">
                                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                     <ul class="list-unstyled">
                                         <li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>
@@ -346,7 +342,7 @@
 
                 </div>
 
-                <div div="row">
+                <!-- <div div="row">
                     <ul class="pagination pagination-lg justify-content-end">
                         <li class="page-item disabled">
                             <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#" tabindex="-1">1</a>
@@ -358,7 +354,7 @@
                             <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -470,17 +466,17 @@
     <!--End Brands-->
 
 
-    <!-- Start Footer -->
-    <footer class="bg-dark" id="tempaltemo_footer">
+     <!-- Start Footer -->
+     <footer class="bg-dark" id="tempaltemo_footer">
         <div class="container">
             <div class="row">
 
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Shoe Shop</h2>
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Shoes Shop</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li>
                             <i class="fas fa-map-marker-alt fa-fw"></i>
-                            123 Consectetur at ligula 10660
+                            7 Thành Thái, Q.10, Tp.Hồ Chí Minh
                         </li>
                         <li>
                             <i class="fa fa-phone fa-fw"></i>
@@ -496,12 +492,12 @@
                 <div class="col-md-4 pt-5">
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Luxury</a></li>
+                        <li><a class="text-decoration-none" href="#">Nike</a></li>
                         <li><a class="text-decoration-none" href="#">Sport Wear</a></li>
-                        <li><a class="text-decoration-none" href="#">Men's Shoes</a></li>
-                        <li><a class="text-decoration-none" href="#">Women's Shoes</a></li>
-                        <li><a class="text-decoration-none" href="#">Popular Dress</a></li>
-                        <li><a class="text-decoration-none" href="#">Gym Accessories</a></li>
+                        <li><a class="text-decoration-none" href="#">Sneakers Shoes</a></li>
+                        <li><a class="text-decoration-none" href="#">Basketball Shoes</a></li>
+                        <li><a class="text-decoration-none" href="#">Fashion Shoes </a></li>
+                        <li><a class="text-decoration-none" href="#">Boots Shoes </a></li>
                         <li><a class="text-decoration-none" href="#">Sport Shoes</a></li>
                     </ul>
                 </div>
